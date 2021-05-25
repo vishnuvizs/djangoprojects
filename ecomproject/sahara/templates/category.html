@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+  {% if category %}
+    {{ category.description|truncatewords:155}}
+  {% else %}
+    Welcome to Sahara, Where you can purchase premium goods at market disrupting prices.
+  {% endif %}
+{% endblock %}
+
+{% block title %}
+  {% if category %}
+    {{category.name}} - Sahara
+  {% else %}
+    Sahara - One Stop Shop
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+      <div>
+        <div>
+          <p><a href="{% url 'ecomapp:allProdCat' %}">Product Collections</a></p>
+        </div>
+      </div>
+    {% endif %}
+
+  {% if category %}
+    <div style="display : inline-block;">
+      <img src="{{category.image.url}}" alt="{{category.name}}" width="80" height="80" style="border-radius: 50%; display: in-line">
+      <h3>{{category.name}}</h3>
+    </div>
+  <br>
+    <div>
+      <p>{{category.desciption}}</p>
+    </div>
+  {% else %}
+    <div>
+      <img class="image-center" src="{% static 'img/banner1.png' %}" alt="Our products" height="390" width="1300">
+    </div>
+  <br>
+  <div>
+    <h1 class="text-center product-text">Our product Collections</h1>
+    <p class="font-monospace text-center">Dummy text is text that is used in the publishing industry or by web designers to occupy the space which will later be filled with 'real' content. This is required when, for example, the final text is not yet available. Dummy text is also known as 'fill text'. It is said that song composers of the past used dummy texts as lyrics when writing melodies in order to have a 'ready-made' text to sing with the melody. Dummy texts have been in use by typesetters since the 16th century.</p>
+  </div>
+  {% endif %}
+  <div class="container">
+    <div class="row">
+      {% for product in products %}
+      <div class="product-margin col-9 col-sm-12 col-md-4 col-lg-4">
+          <div class="card text-center" style="min-width : 18rem;">
+              <a class="card-img-top my-image" href="{{product.get_url}}"><img src="{{product.image.url}}" alt="{{product.name}}" style="width : 100%; height: 280px;"></a>
+              <div class="card-body">
+                <h4 class="card-title">{{product.name}}</h4>
+                <p>₹{{product.price}}/-</p>
+            </div>
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+<div>
+
+        <div class="mx-auto">
+          {% if products.paginator.num_pages > 1 %}
+          <hr>
+          <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-secondary btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+          </div>
+          {% endif %}
+          <br>
+</div>
+  </div>
+{% endblock %}
